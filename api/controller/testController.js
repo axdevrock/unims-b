@@ -131,104 +131,7 @@ async function getQuizDetails(req,res) {
     }
 }
 
-async function submitTestByStudent(req, res) {
-  const { testId, studentId, response } = req.body;
  
-
-  if (!testId || !studentId || !response) {
-    return res.status(400).send({
-      success: false,
-      message: 'Invalid request. Test ID, Student ID, and response are required.',
-    });
-  }
-
-  try {
-    const checkForTest = await TestModel.findById(testId);
-
-    if (!checkForTest) {
-      return res.status(404).send({
-        success: false,
-        message: 'Test details not found.',
-      });
-    }
- 
-
-    const hasAttempted = checkForTest.studentsAttended.some(
-      (entry) => entry.studentId.toString() === studentId
-    );
-
-    if (hasAttempted) {
-      return res.status(409).send({
-        success: false,
-        message: 'Test has already been submitted by the student.',
-      });
-    }
-
-    let score = 0;
-    const { quizQuestions, totalMarks } = checkForTest;
-    const marksPerQuestion = totalMarks / quizQuestions.length; 
-
-    // Calculate the score based on the response
-    quizQuestions.forEach((question, index) => {
-      const studentAnswer = response[index]; 
-
-      if (question.type === 'True/False') {
-        if (studentAnswer.toLowerCase() === question.correctAnswer.toLowerCase()) {
-          score += marksPerQuestion;
-          console.log('Correct! Score added.');
-        }  
-      } else if (question.type === 'Single Choice') {
-        // Comparing student's answer to the correct index option
-        const correctOption = question.options[question.correctAnswer]; 
-        if (studentAnswer === correctOption) {
-          score += marksPerQuestion;
-          console.log('Correct! Score added.');
-        }  
-      } else if (question.type === 'Multiple Choice') {
-        const correctAnswers = new Set(question.correctAnswers.map(String)); // Convert correct answers to string
-        const studentAnswers = new Set(Array.isArray(studentAnswer) ? studentAnswer.map(String) : [String(studentAnswer)]);
-        
-        if (
-          correctAnswers.size === studentAnswers.size &&
-          [...correctAnswers].every(answer => studentAnswers.has(answer))
-        ) {
-          score += marksPerQuestion;
-          console.log('Correct! Score added.');
-        } else {
-          console.log('Incorrect.');
-        }
-      }
-    });
- 
-    score = Math.round(score * 100) / 100;
-
-    console.log('Final score:', score);
-
-    const newData = {
-      studentId,
-      score,
-      response,
-    };
- 
-    checkForTest.studentsAttended.push(newData);
-     
-    await checkForTest.save();
-
-    return res.status(201).send({
-      success: true,
-      message: 'Test submitted successfully.',
-      data : score,
-    });
-
-  } catch (error) {
-    console.error('Error submitting test:', error);
-
-    return res.status(500).send({
-      success: false,
-      message: `Error submitting the test: ${error.message}`,
-    });
-  }
-}
 
 
 // async function submitTestByStudent(req, res) {
@@ -553,7 +456,6 @@ async function submitTestByStudent(req, res) {
 module.exports = {
     addQuiz,
     getAllQuiz,
-    getQuizDetails,
-    submitTestByStudent,
+    getQuizDetails, 
     UpdateTest
 }

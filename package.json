@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node api/server.js",
     "server": "nodemon api/server.js",
-    "seed": "node api/utils/attendanceSeed.js"
+    "seed": "node api/utils/api/utils/studentSeeder.js"
   },
   "author": "",
   "license": "MIT",

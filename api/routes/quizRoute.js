@@ -1,4 +1,5 @@
-const { addQuiz,getAllQuiz,getQuizDetails,submitTestByStudent, UpdateTest} = require('../controller/testController');
+const { addQuiz,getAllQuiz,getQuizDetails, UpdateTest} = require('../controller/testController');
+const { submitTestByStudent } = require('../controller/utils');
 const { protectedRoute } = require('../middleware/authMiddleware');
 const router = require('express').Router();
 
