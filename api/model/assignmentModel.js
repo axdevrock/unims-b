@@ -10,6 +10,10 @@ const submittedBySchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  text:{
+    type:String,
+    
+  },
   marks:{
     type: String,
     default:0
@@ -25,6 +29,10 @@ const assignmentSchema = new mongoose.Schema({
   course: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Course' 
+  },
+  type:{
+    type:String,
+    default:"PDF" // TEXT
   },
   title: {
     type: String,

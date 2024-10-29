@@ -221,12 +221,12 @@ const deleteMaterial = async(req, res) => {
 };
 
 const createAssignmentController = async(req, res) => {
-    const {title, description, courseId} = req.body;
+    const {title, description, courseId,type} = req.body;
     const file = req.file; // Assuming you're also uploading a file
 
     try {
 
-        const newAssignment = new AssignmentModel({title, description, fileUrl: file.filename, course: courseId})
+        const newAssignment = new AssignmentModel({title, description, fileUrl: file.filename,type, course: courseId})
         await newAssignment.save();
 
         return res

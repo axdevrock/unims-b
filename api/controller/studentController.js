@@ -109,7 +109,7 @@ const getACourseController = async(req, res) => {
 };
 const submitAssignmentController = async (req, res) => { 
     try {
-        const {   id , sId} = req.body;
+        const {   id , sId,text} = req.body;
         const file = req.file;
 
         const assignment = await AssignmentModel.findById(id);
@@ -128,6 +128,7 @@ const submitAssignmentController = async (req, res) => {
         assignment?.SubmittedBy.push({
             user: sId,
             fileUrl: file?.filename,
+            text:text
         });
 
         await assignment.save();
